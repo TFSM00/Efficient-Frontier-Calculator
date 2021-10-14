@@ -14,7 +14,7 @@ def stockStatistics(tickersList):
     
     for ticker in tickersList:
         
-        data = yf.get_data(ticker, start_date="08/01/2004",end_date="10/31/2019", interval="1mo") # DATE IS MM/DD/YYYY
+        data = yf.get_data(ticker, start_date="08/31/2004",end_date="10/31/2019", interval="1mo") # DATE IS MM/DD/YYYY
         
         prices = data["adjclose"].tolist()
         returns = []
@@ -25,7 +25,7 @@ def stockStatistics(tickersList):
         average = round(np.mean(returns),8)
         standardDeviation = round(stats.pstdev(returns),8)
         kurtosis = round(st.kurtosis(returns),8)
-        sample = round(len(returns),0)
+        sample = len(returns)
         actualKurtosis = round(float((((kurtosis*(sample-2)*(sample-3)/(sample-1)-6)/(sample+1)+3))),8)
         skewness = round(st.skew(returns, bias=True),8)
         jarque_bera_test, jarque_bera_p_value = st.jarque_bera(returns)
@@ -51,8 +51,8 @@ def stockStatisticsTable(tickersList):
     return stockStats
 
 
-print(stockStatisticsTable(tickers))
 
 
-# if "__name__"="__main__":
-#     print(stockStatistics(tickers))
+
+if "__name__"=="__main__":
+    print(stockStatistics(tickers))
