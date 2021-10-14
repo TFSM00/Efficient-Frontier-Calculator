@@ -1,5 +1,4 @@
 import pandas as pd
-from scipy.stats.stats import skew
 import yahoo_fin.stock_info as yf
 import numpy as np
 import statistics as stats
