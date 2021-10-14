@@ -28,12 +28,14 @@ def getStockStats(ticker):
     return [average, standardDeviation, kurtosis, sample, actualKurtosis, skewness, jarque_bera_test, jarque_bera_p_value]
 
 
-if "__name__" == "__name__": #if script runs as program not import
-    print("Average Returns: "+str(average))
-    print("Standard Deviation: "+str(standardDeviation))
-    print("Kurtosis: "+str(kurtosis))
-    print("Sample (N): "+str(sample))
-    print("Actual Kurtosis: "+str(actualKurtosis))
-    print("Skewness: "+str(skewness))
-    print("Jarque-Bera Test: "+str(jarque_bera_test))
-    print("Jarque-Bera p-value: "+str(jarque_bera_p_value))
+if __name__ == "__main__": #if script runs as program not import
+    stats = getStockStats(ticker)
+    print("General Statistics on ticker: " + ticker + "\n")
+    print("Average Returns: " + str(stats[0]))
+    print("Standard Deviation: " + str(stats[1]))
+    print("Kurtosis: " + str(stats[2]))
+    print("Sample (N): " + str(stats[3]))
+    print("Actual Kurtosis: " + str(stats[4]))
+    print("Skewness: " + str(stats[5]))
+    print("Jarque-Bera Test: " + str(stats[6]))
+    print("Jarque-Bera p-value: " + str(stats[7]))
