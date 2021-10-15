@@ -19,14 +19,11 @@ def stockCovariance(tickerList):
 
         table_data[i]=stockCovData
 
-    covariance_table_raw = pd.DataFrame.from_dict(table_data)
-    covariance_table_raw.insert(0,"Tickers", tickerList)
-    covariance_table = covariance_table_raw.to_string(index=False)
-
+    covariance_table = pd.DataFrame.from_dict(table_data).set_index([pd.Index(tickerList)])
     return covariance_table
 
-
-def stockCovarianceTable(tickerList):
+    
+def stockCovarianceTabulate(tickerList):
     deviations = stdDeviation(tickerList)
     returns = stockReturns(tickerList)
     table_data = {}
@@ -43,8 +40,7 @@ def stockCovarianceTable(tickerList):
     covariance_table.insert(0,"Tickers", tickerList)
     print(tabulate(covariance_table,headers=tickerList, tablefmt="rst",showindex=False))
 
-
 if __name__ == "__main__":
-    stockCovarianceTable(tickers)
+    stockCovarianceTabulate(tickers)
 
 

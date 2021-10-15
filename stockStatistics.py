@@ -45,6 +45,16 @@ def stockStatisticsTable(tickerList):
     statistics = ["Average","Standard Deviation","Kurtosis","Sample","Actual Kurtosis","Skewness","Jarque-Bera Test","Jarque-Bera p-value"]
     
 
+    stockStatsTable = pd.DataFrame.from_dict(mainData).set_index([pd.Index(statistics)])
+    
+    
+    return stockStatsTable
+
+def stockStatisticsTabulate(tickerList):
+    mainData = stockStatistics(tickerList)
+    statistics = ["Average","Standard Deviation","Kurtosis","Sample","Actual Kurtosis","Skewness","Jarque-Bera Test","Jarque-Bera p-value"]
+    
+
     stockStats = pd.DataFrame.from_dict(mainData)
     stockStats.insert(0,"Statistics", statistics)
     
@@ -68,4 +78,4 @@ def stockReturns(tickerList):
 
 
 if __name__=="__main__":
-    stockStatisticsTable(tickers)
+    print(stockStatisticsTabulate(tickers))

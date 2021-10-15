@@ -18,14 +18,12 @@ def stockCorrelation(tickerList):
 
         table_data[i]=stockCorrData
 
-    correlation_table_raw = pd.DataFrame.from_dict(table_data)
-    correlation_table_raw.insert(0,"Tickers", tickerList)
-    correlation_table = correlation_table_raw.to_string(index=False)
-
+    correlation_table = pd.DataFrame.from_dict(table_data).set_index([pd.Index(tickerList)])
+    
     return correlation_table
 
-
-def stockCorrelationTable(tickerList):
+    
+def stockCorrelationTabulate(tickerList):
     returns = stockReturns(tickerList)
 
     table_data = {}
@@ -42,7 +40,6 @@ def stockCorrelationTable(tickerList):
     correlation_table.insert(0,"Tickers", tickerList)
     
     print(tabulate(correlation_table,headers=tickerList, tablefmt="rst",showindex=False))
-    
 
 if __name__ == "__main__":
-    stockCorrelationTable(tickers)
+    stockCorrelationTabulate(tickers)

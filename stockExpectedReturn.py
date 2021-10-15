@@ -18,7 +18,7 @@ def Average_StdDev_Data(tickerList):
     
     return table
 
-def Average_StdDev_Table(tickerList):
+def Average_StdDev_Tabulate(tickerList):
     data = stockStatistics(tickerList)
 
     average = []
@@ -43,4 +43,4 @@ def stdDeviation(tickerList):
     return stdev
 
 if __name__ == '__main__':
-    Average_StdDev_Table(tickers)
+    Average_StdDev_Tabulate(tickers)
