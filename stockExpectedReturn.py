@@ -42,5 +42,13 @@ def stdDeviation(tickerList):
     
     return stdev
 
+def average(tickerList):
+    data = stockStatistics(tickerList)
+    average = []
+    for key in data.keys():
+        average.append(data.get(key)[1])
+    
+    return average
+
 if __name__ == '__main__':
     Average_StdDev_Tabulate(tickers)
