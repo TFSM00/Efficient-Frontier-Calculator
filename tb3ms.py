@@ -30,7 +30,7 @@ def TB3MS_Data():
     average = np.mean(effective_monthly_rate)
     stdev = stats.stdev(effective_monthly_rate)
 
-    return {"Average":average,"Standard Deviation": stdev}
+    return {"Average":average,"Standard Deviation": stdev, "Last Effective Monthly Rate": tb3ms[-1]}
 
 
 if __name__=="__main__":
