@@ -37,4 +37,5 @@ def weightedCovariance(tickerList,weightsList):
         return cov
 
 
-
+if __name__ == "__main__":
+    weightedCovarianceEqualWeights(tickers)
