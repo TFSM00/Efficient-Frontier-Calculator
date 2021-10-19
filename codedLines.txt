@@ -1,16 +1,23 @@
     2 .gitignore
    25 README.md
+    2 codedLines.txt
     4 efficient_frontier.py
     0 efficient_frontier_data.py
-   22 marketData.py
+   38 marketData.py
+   28 marketRiskPremium.py
+   19 portfolioActualReturns.py
    87 portfolioMeasures.py
+   43 securityMarketLine.py
+  106 singleStockLinearRegression.py
+   10 singleStockPrice.py
    41 singleStockStats.py
    44 stockCorrelation.py
    46 stockCovariance.py
    54 stockExpectedReturn.py
-   81 stockStatistics.py
-   61 tb3ms.py
+   35 stockLinearRegression.py
+  101 stockStatistics.py
+   80 tb3ms.py
    74 team-15.xlsx
-  184 treasurybill.csv
+  183 treasurybill.csv
    40 weightedCovariance.py
-  765 total
+ 1062 total
