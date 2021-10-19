@@ -1,6 +1,6 @@
-import collections
 from stockStatistics import stockReturnsList
 from tb3ms import TB3MS_RiskFree
+
 
 tickers = ["AAPL","GOOG","AMZN","MSFT","INTC","IBM","ORCL","CSCO","NVDA"]
 
