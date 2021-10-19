@@ -1,10 +1,9 @@
-import pandas as pd
 import yahoo_fin.stock_info as yf
 import numpy as np
 import statistics as stats
 import scipy.stats as st
 
-ticker = "SPY"
+ticker = "AAPL"
 
 def getStockStats(ticker):
 
@@ -26,6 +25,7 @@ def getStockStats(ticker):
     jarque_bera_test, jarque_bera_p_value = st.jarque_bera(returns)
 
     return [average, standardDeviation, kurtosis, sample, actualKurtosis, skewness, jarque_bera_test, jarque_bera_p_value]
+
 
 
 if __name__ == "__main__": #if script runs as program not import
