@@ -18,6 +18,22 @@ def marketStats(ticker):
     
     return {"Average": average, "Standard Deviation": standardDeviation}
 
+def getMarketPrice():
+    data = yf.get_data("SPY", start_date="08/31/2004",end_date="10/31/2019", interval="1mo") # DATE IS MM/DD/YYYY
+
+    return data
+
+def marketReturns():   
+    data = yf.get_data("SPY", start_date="08/31/2004",end_date="10/31/2019", interval="1mo") # DATE IS MM/DD/YYYY
+    
+    prices = data["adjclose"].tolist()
+    returns = []
+    
+    for i in range(0, len(prices)-1):
+        returns.append(float((prices[i+1]/prices[i])-1))
+    
+    return returns
+
 
 if __name__=="__main__":
     print(marketStats(market))
