@@ -76,6 +76,26 @@ def stockReturns(tickerList):
     
     return returnsData
 
+def stockReturnsList(tickerList):
+    
+    data = yf.get_data(tickerList[0], start_date="08/31/2004",end_date="10/31/2019", interval="1mo") # DATE IS MM/DD/YYYY
+    
+    del data["open"], data["close"], data["high"], data["low"], data["volume"], data["ticker"]
+    
+    for ticker in tickerList:
+        datax = yf.get_data(ticker, start_date="08/31/2004",end_date="10/31/2019", interval="1mo") # DATE IS MM/DD/YYYY
+        prices = datax["adjclose"].tolist()
+        returns = [None]
+    
+        for i in range(0, len(prices)-1):
+            returns.append(float((prices[i+1]/prices[i])-1))
+        
+        data[ticker]=returns
+   
+    del data["adjclose"]
+    data.drop(data.head(1).index,inplace=True)
+    return data
+
 
 if __name__=="__main__":
     print(stockStatisticsTabulate(tickers))
