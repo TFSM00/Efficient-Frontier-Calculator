@@ -13,7 +13,7 @@ def stockLinearRegression(tickerList):
     ticker = tickerList[-1]
     
     stock = actual_returns[ticker]
-    market = market_actual_returns["SPY"]
+    market = market_actual_returns["^GSPC"]
 
     
 
