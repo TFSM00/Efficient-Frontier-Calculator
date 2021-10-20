@@ -2,7 +2,7 @@ import yahoo_fin.stock_info as yf
 import numpy as np
 import statistics as stats
 
-market = "SPY"
+market = "^GSPC"
 
 def marketStats(ticker):   
     data = yf.get_data(ticker, start_date="08/31/2004",end_date="10/31/2019", interval="1mo") # DATE IS MM/DD/YYYY
@@ -19,12 +19,12 @@ def marketStats(ticker):
     return {"Average": average, "Standard Deviation": standardDeviation}
 
 def getMarketPrice():
-    data = yf.get_data("SPY", start_date="08/31/2004",end_date="10/31/2019", interval="1mo") # DATE IS MM/DD/YYYY
+    data = yf.get_data("^GSPC", start_date="08/31/2004",end_date="10/31/2019", interval="1mo") # DATE IS MM/DD/YYYY
 
     return data
 
 def marketReturns():   
-    data = yf.get_data("SPY", start_date="08/31/2004",end_date="10/31/2019", interval="1mo") # DATE IS MM/DD/YYYY
+    data = yf.get_data("^GSPC", start_date="08/31/2004",end_date="10/31/2019", interval="1mo") # DATE IS MM/DD/YYYY
     
     prices = data["adjclose"].tolist()
     returns = []
