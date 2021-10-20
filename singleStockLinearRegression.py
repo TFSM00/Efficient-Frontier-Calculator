@@ -12,13 +12,13 @@ def singleStockLinearRegression_Summary(tickerList, ind):
 
     ticker = tickerList[ind]
     stockReturns = actual_returns[ticker]
-    market = market_actual_returns["SPY"]
+    market = market_actual_returns["^GSPC"]
 
-    data={ticker: stockReturns, "SPY":market}
+    data={ticker: stockReturns, "S&P500":market}
     df = pd.DataFrame.from_dict(data)
 
     Y = df[ticker]
-    X=df["SPY"]
+    X=df["S&P500"]
 
     X = sm.add_constant(X)
 
@@ -37,13 +37,13 @@ def singleStockLinearRegression_Stats(tickerList, ind):
     ticker = tickerList[ind]
     
     stockReturns = actual_returns[ticker]
-    market = market_actual_returns["SPY"]
+    market = market_actual_returns["^GSPC"]
 
-    data={ticker: stockReturns, "SPY":market}
+    data={ticker: stockReturns, "S&P500":market}
     df = pd.DataFrame.from_dict(data)
 
     Y = df[ticker]
-    X=df["SPY"]
+    X=df["S&P500"]
 
     X = sm.add_constant(X)
 
@@ -52,11 +52,11 @@ def singleStockLinearRegression_Stats(tickerList, ind):
     alpha_beta = dict(model.params)
 
     alpha_beta["Alpha"] = alpha_beta.pop("const")
-    alpha_beta["Beta"] = alpha_beta.pop("SPY")
+    alpha_beta["Beta"] = alpha_beta.pop("S&P500")
 
     p_values = dict(model.pvalues)
     p_values["Alpha p-value"] = p_values.pop("const")
-    p_values["Beta p-value"] = p_values.pop("SPY")
+    p_values["Beta p-value"] = p_values.pop("S&P500")
 
     r_squared = model.rsquared
 
@@ -69,13 +69,13 @@ def singleStockLinearRegression_StatsOutput(tickerList, ind): #wont accept just 
     ticker = tickerList[ind]
 
     stockReturns = actual_returns[f"{ticker}"]
-    market = market_actual_returns["SPY"]
+    market = market_actual_returns["^GSPC"]
 
-    data={f"{ticker}": stockReturns, "SPY":market}
+    data={f"{ticker}": stockReturns, "S&P500":market}
     df = pd.DataFrame.from_dict(data)
 
     Y = df[f"{ticker}"]
-    X=df["SPY"]
+    X=df["S&P500"]
 
     X = sm.add_constant(X)
 
@@ -84,11 +84,11 @@ def singleStockLinearRegression_StatsOutput(tickerList, ind): #wont accept just 
     alpha_beta = dict(model.params)
 
     alpha_beta["Alpha"] = alpha_beta.pop("const")
-    alpha_beta["Beta"] = alpha_beta.pop("SPY")
+    alpha_beta["Beta"] = alpha_beta.pop("S&P500")
 
     p_values = dict(model.pvalues)
     p_values["Alpha p-value"] = p_values.pop("const")
-    p_values["Beta p-value"] = p_values.pop("SPY")
+    p_values["Beta p-value"] = p_values.pop("S&P500")
 
     r_squared = model.rsquared
 
