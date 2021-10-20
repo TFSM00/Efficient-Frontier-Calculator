@@ -3,24 +3,24 @@ from tb3ms import TB3MS_RiskFree
 import numpy as np
 
 def marketActualReturns():
-    returns = stockReturnsList(["SPY"])
+    returns = stockReturnsList(["^GSPC"])
 
     riskFree = TB3MS_RiskFree()
     riskFree.pop(0)
 
 
-    returns["SPY"] = returns["SPY"] - riskFree
+    returns["^GSPC"] = returns["^GSPC"] - riskFree
 
     return returns
 
 def marketAverageRiskPremium():
-    returns = stockReturnsList(["SPY"])
+    returns = stockReturnsList(["^GSPC"])
 
     riskFree = TB3MS_RiskFree()
     riskFree.pop(0)
 
 
-    riskPremium = returns["SPY"] - riskFree
+    riskPremium = returns["^GSPC"] - riskFree
 
     return np.mean(riskPremium)
 
