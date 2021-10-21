@@ -19,7 +19,7 @@ def portfolioLinearRegression(tickerList):
     
     for i in tickerList:
         act_ret = actual_returns[i]
-        market = market_actual_returns["^GSPC"]
+        market = market_actual_returns
 
         data={i: act_ret, "S&P500":market}
         df = pd.DataFrame.from_dict(data)
@@ -100,13 +100,15 @@ def SecurityMarketLine(tickerList):
     
     plt.plot([2,averageRiskPremium],[0,averageRf],color="blue")
     plt.legend(handles=scatter.legend_elements()[0], labels = assets)
+    plt.axhline(linewidth=1, color="black")
+    plt.axvline(linewidth=1, color="black")
     plt.show()
     
 
 
-print(portfolioLinearRegression(tickers))
+#print(portfolioLinearRegression(tickers))
 
 #print(securityBetaTable(tickers))
 
-#SecurityMarketLine(tickers)
+SecurityMarketLine(tickers)
 
