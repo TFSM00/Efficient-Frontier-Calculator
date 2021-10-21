@@ -96,6 +96,16 @@ def stockReturnsList(tickerList):
     data.drop(data.head(1).index,inplace=True)
     return data
 
+def stockReturnsforSingle(ticker):
+    data = yf.get_data(ticker, start_date="08/31/2004",end_date="10/31/2019", interval="1mo") # DATE IS MM/DD/YYYY
+    
+    prices = data["adjclose"].tolist()
+    returns = []
+    
+    for i in range(0, len(prices)-1):
+        returns.append(float((prices[i+1]/prices[i])-1))
+        
+    return returns
 
 if __name__=="__main__":
     print(stockStatisticsTabulate(tickers))
