@@ -25,12 +25,13 @@ def TB3MS_Data():
         tb3ms.append(round(float(tb3ms_perc[i]/100),ndigits=4))
 
     for i in range(0, len(tb3ms)):
-        effective_monthly_rate.append(float(((1+(tb3ms[i]/4))**(1/3))-1))
+        effective_monthly_rate.append(float((((1+(tb3ms[i]/4)))**(1/3))-1))
 
     average = np.mean(effective_monthly_rate)
     stdev = stats.stdev(effective_monthly_rate)
 
     return {"Average":average,"Standard Deviation": stdev, "Last Effective Monthly Rate": tb3ms[-1]}
+    
 
 def TB3MS_RiskFree():
     startdate="2004-08-31"
@@ -52,6 +53,7 @@ def TB3MS_RiskFree():
 
     return tb3ms
 
+
 if __name__=="__main__":
     print(TB3MS_Data())
 
@@ -59,23 +61,3 @@ if __name__=="__main__":
 
 
 
-
-
-
-
-
-
-
-# import pandas as pd
-# import yahoo_fin.stock_info as yf
-# import numpy as np
-# import statistics as stats
-# import scipy.stats as st
-
-# ticker = "^FVX"
-# data = yf.get_data(ticker, start_date="08/01/2004",end_date="10/31/2019", interval="1mo") # DATE IS MM/DD/YYYY
-
-# rates = data["adjclose"].tolist()
-
-# #print(rates)
-# print(data)
