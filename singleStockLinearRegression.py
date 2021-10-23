@@ -1,17 +1,14 @@
 import pandas as pd
-from portfolioActualReturns import portfolioActualReturns
+from portfolioActualReturns import portfolioActualReturns, singleStockActualReturns
 from marketRiskPremium import marketActualReturns
 import statsmodels.api as sm
 
 tickers = ["AAPL","GOOG","AMZN","MSFT","INTC","IBM","ORCL","CSCO","NVDA"]
 
-def singleStockLinearRegression_Summary(tickerList, ind):
+def singleStockLinearRegression_Summary(ticker):
     
-    actual_returns = portfolioActualReturns(tickerList) #the stock has to be in the list
+    stockReturns = singleStockActualReturns(ticker) 
     market = marketActualReturns()
-
-    ticker = tickerList[ind]
-    stockReturns = actual_returns[ticker]
 
     data={ticker: stockReturns, "S&P500":market}
     df = pd.DataFrame.from_dict(data)
@@ -29,14 +26,10 @@ def singleStockLinearRegression_Summary(tickerList, ind):
 
 
 
-def singleStockLinearRegression_Stats(tickerList, ind):
-    actual_returns = portfolioActualReturns(tickerList)
+def singleStockLinearRegression_Stats(ticker):
+    stockReturns = singleStockActualReturns(ticker)
     market = marketActualReturns()
     
-    ticker = tickerList[ind]
-    
-    stockReturns = actual_returns[ticker]
-
     data={ticker: stockReturns, "S&P500":market}
     df = pd.DataFrame.from_dict(data)
 
@@ -60,13 +53,10 @@ def singleStockLinearRegression_Stats(tickerList, ind):
 
     return [alpha_beta,p_values,r_squared]
 
-def singleStockLinearRegression_StatsOutput(tickerList, ind): #wont accept just the stock
-    actual_returns = portfolioActualReturns(tickerList)
+def singleStockLinearRegression_StatsOutput(ticker): #wont accept just the stock
+    stockReturns = singleStockActualReturns(ticker)
     market = marketActualReturns()
 
-    ticker = tickerList[ind]
-
-    stockReturns = actual_returns[f"{ticker}"]
 
     data={f"{ticker}": stockReturns, "S&P500":market}
     df = pd.DataFrame.from_dict(data)
@@ -101,4 +91,6 @@ def singleStockLinearRegression_StatsOutput(tickerList, ind): #wont accept just 
     
 
 if __name__=="__main__":
-    singleStockLinearRegression_StatsOutput(tickers,0)
+    singleStockLinearRegression_StatsOutput("INTC")
+    #print(singleStockLinearRegression_Summary("INTC"))
+    #print(singleStockLinearRegression_Stats("INTC"))

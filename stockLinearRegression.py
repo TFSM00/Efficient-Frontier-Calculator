@@ -1,23 +1,16 @@
 import pandas as pd
-from portfolioActualReturns import portfolioActualReturns
+from portfolioActualReturns import singleStockActualReturns
 from marketRiskPremium import marketActualReturns
 import matplotlib.pyplot as plt
 import numpy as np
 
-tickers = ["AAPL","GOOG","AMZN","MSFT","INTC","IBM","ORCL","CSCO","NVDA"]
 
-def stockLinearRegression(tickerList):
-    actual_returns = portfolioActualReturns(tickerList)
-    market_actual_returns = marketActualReturns()
+def stockLinearRegression(ticker):
+    stock = singleStockActualReturns(ticker)
+    market = marketActualReturns()
 
-    ticker = tickerList[-1]
-    
-    stock = actual_returns[ticker]
-    market = market_actual_returns["^GSPC"]
 
-    
-
-    df = pd.DataFrame([market,stock], columns=["Market",ticker])
+    df = pd.DataFrame({"Market": market, ticker: stock})
 
     plt.scatter(market,stock)
     plt.title(f"{ticker} Actual Returns vs Market")
@@ -29,8 +22,10 @@ def stockLinearRegression(tickerList):
     p = np.poly1d(z)
 
     plt.plot(market,p(market),"r--")
+    plt.axhline(linewidth=1, color="black")
+    plt.axvline(linewidth=1, color="black")
     plt.show()
 
 
 if __name__=="__main__":
-    stockLinearRegression(tickers)
+    stockLinearRegression("MSFT")
