@@ -8,11 +8,10 @@ tickers = ["AAPL","GOOG","AMZN","MSFT","INTC","IBM","ORCL","CSCO","NVDA"]
 def singleStockLinearRegression_Summary(tickerList, ind):
     
     actual_returns = portfolioActualReturns(tickerList) #the stock has to be in the list
-    market_actual_returns = marketActualReturns()
+    market = marketActualReturns()
 
     ticker = tickerList[ind]
     stockReturns = actual_returns[ticker]
-    market = market_actual_returns["^GSPC"]
 
     data={ticker: stockReturns, "S&P500":market}
     df = pd.DataFrame.from_dict(data)
@@ -32,12 +31,11 @@ def singleStockLinearRegression_Summary(tickerList, ind):
 
 def singleStockLinearRegression_Stats(tickerList, ind):
     actual_returns = portfolioActualReturns(tickerList)
-    market_actual_returns = marketActualReturns()
+    market = marketActualReturns()
     
     ticker = tickerList[ind]
     
     stockReturns = actual_returns[ticker]
-    market = market_actual_returns["^GSPC"]
 
     data={ticker: stockReturns, "S&P500":market}
     df = pd.DataFrame.from_dict(data)
@@ -64,12 +62,11 @@ def singleStockLinearRegression_Stats(tickerList, ind):
 
 def singleStockLinearRegression_StatsOutput(tickerList, ind): #wont accept just the stock
     actual_returns = portfolioActualReturns(tickerList)
-    market_actual_returns = marketActualReturns()
+    market = marketActualReturns()
 
     ticker = tickerList[ind]
 
     stockReturns = actual_returns[f"{ticker}"]
-    market = market_actual_returns["^GSPC"]
 
     data={f"{ticker}": stockReturns, "S&P500":market}
     df = pd.DataFrame.from_dict(data)
