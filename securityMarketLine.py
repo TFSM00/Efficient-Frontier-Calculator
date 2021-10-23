@@ -5,10 +5,7 @@ import statsmodels.api as sm
 from tb3ms import TB3MS_Data
 from marketRiskPremium import marketAverageRiskPremium
 import matplotlib.pyplot as plt
-import matplotlib.lines as mlines
-import matplotlib.transforms as mtransforms
-import numpy as np
-from matplotlib.colors import ListedColormap
+
 
 tickers = ["AAPL","GOOG","AMZN","MSFT","INTC","IBM","ORCL","CSCO","NVDA"]
 
