@@ -50,6 +50,7 @@ def RollingBetaGraphs(tickerList):
             plt.xlabel("Date")
             plt.ylabel("Rolling Beta")
             plt.grid()
+            plt.legend([f"{tick} Beta",r"95% Lower Bound", r"95% Upper Bound"])
             pdf.savefig()
             
         
