@@ -15,16 +15,16 @@ def RollingBetaGraphs(tickerList):
 
             stockRet["S&P500"] = mktRet["S&P500"]
 
-            betas = [None]*30
-            stddevs = [None]*30
-            UpperBound95 = [None]*30
-            LowerBound95 = [None]*30
+            betas = [None]*36
+            stddevs = [None]*36
+            UpperBound95 = [None]*36
+            LowerBound95 = [None]*36
             const = 2.03224450931772
 
 
-            for i in range(0, len(stockRet["S&P500"])-30):
-                tickRet = stockRet[tick][i:i+30]
-                marketRet = mktRet["S&P500"][i:i+30]
+            for i in range(0, len(stockRet["S&P500"])-36):
+                tickRet = stockRet[tick][i:i+36]
+                marketRet = mktRet["S&P500"][i:i+36]
                 beta, stddev = np.polyfit(marketRet,tickRet,1)
                 betas.append(beta)
                 stddevs.append(stddev)
@@ -42,7 +42,7 @@ def RollingBetaGraphs(tickerList):
             del newTable[tick]
             del newTable["S&P500"]
             del newTable["Standard Deviation"]
-            newTable = newTable[30:]
+            newTable = newTable[36:]
 
             plt.figure()
             plt.plot(newTable)
