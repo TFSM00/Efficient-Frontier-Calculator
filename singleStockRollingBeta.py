@@ -46,8 +46,10 @@ def singleStockRollingBeta(ticker):
     plt.ylabel("Rolling Beta")
 
     plt.grid()
+    plt.legend([f"{ticker} Beta",r"95% Lower Bound", r"95% Upper Bound"])
 
     plt.show()
 
 
-
+if __name__=="__main__":
+    singleStockRollingBeta(ticker)
