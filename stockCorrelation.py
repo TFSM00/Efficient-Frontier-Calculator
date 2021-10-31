@@ -6,6 +6,10 @@ from tabulate import tabulate
 tickers = ["AAPL","GOOG","AMZN","MSFT","INTC","IBM","ORCL","CSCO","NVDA"]
 
 def stockCorrelation(tickerList):
+    """
+    Returns a correlation dataframe between all tickers
+    """
+
     returns = stockReturns(tickerList)
 
     table_data = {}
@@ -13,7 +17,7 @@ def stockCorrelation(tickerList):
     for i in tickerList:
         stockCorrData = []
         for j in tickerList:
-            coef = np.corrcoef(returns.get(i),returns.get(j))[0,1]
+            coef = np.corrcoef(returns.get(i),returns.get(j))[0,1] # Correlation
             stockCorrData.append(coef)
 
         table_data[i]=stockCorrData
@@ -22,24 +26,6 @@ def stockCorrelation(tickerList):
     
     return correlation_table
 
-    
-def stockCorrelationTabulate(tickerList):
-    returns = stockReturns(tickerList)
-
-    table_data = {}
-
-    for i in tickerList:
-        stockCorrData = []
-        for j in tickerList:
-            coef = np.corrcoef(returns.get(i),returns.get(j))[0,1]
-            stockCorrData.append(coef)
-
-        table_data[i]=stockCorrData
-
-    correlation_table = pd.DataFrame.from_dict(table_data)
-    correlation_table.insert(0,"Tickers", tickerList)
-    
-    print(tabulate(correlation_table,headers=tickerList, tablefmt="rst",showindex=False))
 
 if __name__ == "__main__":
-    stockCorrelationTabulate(tickers)
+    stockCorrelation(tickers)

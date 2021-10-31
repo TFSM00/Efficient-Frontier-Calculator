@@ -7,6 +7,9 @@ from matplotlib.backends.backend_pdf import PdfPages
 tickers = ["AAPL","GOOG","AMZN","MSFT","INTC","IBM","ORCL","CSCO","NVDA"]
 
 def RollingBetaGraphs(tickerList):
+    """
+    Opens a pdf and displays the rolling beta for every ticker in the list
+    """
     
     with PdfPages("RollingBeta.pdf") as pdf:
         for tick in tickerList:  
@@ -51,10 +54,10 @@ def RollingBetaGraphs(tickerList):
             plt.ylabel("Rolling Beta")
             plt.grid()
             plt.legend([f"{tick} Beta",r"95% Lower Bound", r"95% Upper Bound"])
-            pdf.savefig()
+            pdf.savefig() # Adds plot to the pdf
             
-        
-RollingBetaGraphs(tickers)
+if __name__ == "__main__":       
+    RollingBetaGraphs(tickers)
 
 
 

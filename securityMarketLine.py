@@ -10,6 +10,10 @@ import matplotlib.pyplot as plt
 tickers = ["AAPL","GOOG","AMZN","MSFT","INTC","IBM","ORCL","CSCO","NVDA"]
 
 def portfolioLinearRegression(tickerList):
+    """
+    Returns the Linear Regression Stats as a dataframe for every ticker
+    """
+    
     actual_returns = portfolioActualReturns(tickerList)
     market_actual_returns = marketActualReturns()
     LinearRegression = pd.DataFrame(columns=["Alpha","Alpha p-value","Beta","Beta p-value","R-Squared"])
@@ -44,22 +48,26 @@ def portfolioLinearRegression(tickerList):
     return LinearRegression
 
 def securityBetaTable(tickerList):
+    """
+    Returns the betas and expected return for each stock, the t-bill and the market as a dataframe
+    """
+    
     linearRegressionData = portfolioLinearRegression(tickerList)
     betas = linearRegressionData["Beta"].to_list()
     alphas = linearRegressionData["Alpha"].to_list()
     tbData = TB3MS_Data()
     averageRf = tbData.get("Average")
     averageRiskPremium = marketAverageRiskPremium()
-    expectedReturn = []
+    expectedReturns = []
     
-    for i in range(0,len(tickerList)):
-        Eri = alphas[i]*(betas[i]*averageRiskPremium)
-        expectedReturn.append(Eri)
+    for i in range(0,len(tickerList)): # Calculation of the expected return
+        expRet = alphas[i]*(betas[i]*averageRiskPremium)
+        expectedReturns.append(expRet)
 
 
     betaTable = pd.DataFrame(columns=tickerList)
     betaTable.loc["Beta"] = betas
-    betaTable.loc["Expected Return"] = expectedReturn
+    betaTable.loc["Expected Return"] = expectedReturns
     betaTable["Risk Free"] = [0,averageRf]
     betaTable["Market"] = [2,averageRiskPremium]
 
@@ -67,38 +75,40 @@ def securityBetaTable(tickerList):
 
 
 def SecurityMarketLine(tickerList):
+    """
+    Displays the security market line and scatters the betas and expected returns in the plot
+    """
+    
     linearRegressionData = portfolioLinearRegression(tickerList)
     betas = linearRegressionData["Beta"].to_list()
     alphas = linearRegressionData["Alpha"].to_list()
     tbData = TB3MS_Data()
     averageRf = tbData.get("Average")
     averageRiskPremium = marketAverageRiskPremium()
-    expectedReturn = []
+    expectedReturns = []
     
-    for i in range(0,len(tickerList)):
-        Eri = alphas[i]*(betas[i]*averageRiskPremium)
-        expectedReturn.append(Eri)
+    for i in range(0,len(tickerList)): # Calculation of the expected return
+        expRet = alphas[i]*(betas[i]*averageRiskPremium)
+        expectedReturns.append(expRet)
     
     selectList = []
-  
-    assets = [tick for tick in tickerList]
     
     for i in range(0, len(tickerList)):
         selectList.append(i)
         
-    scatter = plt.scatter(betas, expectedReturn, c=selectList)
+    scatter = plt.scatter(betas, expectedReturns, c=selectList)
 
-    dots = zip(betas,expectedReturn)
+    dots = zip(betas,expectedReturns)
     iter = 0
-    for beta, eri in dots:
+    for beta, expRet in dots:
         label = tickerList[iter]
-        plt.annotate(label, (beta,eri), textcoords = "offset points",xytext=(0,10),ha="center")
+        plt.annotate(label, (beta,expRet), textcoords = "offset points",xytext=(0,10),ha="center") # Adds ticker above the dots on the plot
         iter+=1
     
-    plt.plot([2,averageRiskPremium],[0,averageRf],color="blue")
-    plt.legend(handles=scatter.legend_elements()[0], labels = assets)
-    plt.axhline(linewidth=1, color="black")
-    plt.axvline(linewidth=1, color="black")
+    plt.plot([2,averageRiskPremium],[0,averageRf],color="blue") # Plots the SML
+    plt.legend(handles=scatter.legend_elements()[0], labels = tickerList) # Adds a legend to the plot
+    plt.axhline(linewidth=1, color="black") # Axis Line
+    plt.axvline(linewidth=1, color="black") # Axis Line
     plt.show()
     
 

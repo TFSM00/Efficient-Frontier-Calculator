@@ -3,24 +3,27 @@ import yahoo_fin.stock_info as yf
 import numpy as np
 import statistics as stats
 import scipy.stats as st
-from tabulate import tabulate
-
 
 tickers = ["AAPL","GOOG","AMZN","MSFT","INTC","IBM","ORCL","CSCO","NVDA","SPY"]
 
 
-def stockStatistics(tickerList):
-    mainData={}
+def stockStatistics(tickerList): 
+    """
+    This function gets a few statistics related to a stocks price or returns in a given period
+    It outputs statistics as a dictionary
+    """
+
+    mainData={} #serves as storage for data
     
     for ticker in tickerList:
         
         data = yf.get_data(ticker, start_date="08/31/2004",end_date="10/31/2019", interval="1mo") # DATE IS MM/DD/YYYY
         
-        prices = data["adjclose"].tolist()
-        returns = []
+        prices = data["adjclose"].tolist() #only prices
+        returns = [] #returns list
 
-        for i in range(0, len(prices)-1):
-            returns.append(float((prices[i+1]/prices[i])-1))
+        for i in range(0, len(prices)-1): # -1 because it references a date and the next one so last date is impossible to calculate
+            returns.append(float((prices[i+1]/prices[i])-1)) #add return to list
 
         average = round(np.mean(returns),8)
         standardDeviation = round(stats.pstdev(returns),8)
@@ -38,29 +41,27 @@ def stockStatistics(tickerList):
         
         mainData[ticker]=statsList
         
-    return mainData
+    return mainData 
 
-def stockStatisticsTable(tickerList):
+def stockStatisticsTable(tickerList): 
+    """
+    Returns statistics as pandas dataframe
+    """
+    
     mainData = stockStatistics(tickerList)
     statistics = ["Average","Standard Deviation","Kurtosis","Sample","Actual Kurtosis","Skewness","Jarque-Bera Test","Jarque-Bera p-value"]
     
-
     stockStatsTable = pd.DataFrame.from_dict(mainData).set_index([pd.Index(statistics)])
-    
+    #get table from dict and set index as statistics not the tickers as they are columns
     
     return stockStatsTable
 
-def stockStatisticsTabulate(tickerList):
-    mainData = stockStatistics(tickerList)
-    statistics = ["Average","Standard Deviation","Kurtosis","Sample","Actual Kurtosis","Skewness","Jarque-Bera Test","Jarque-Bera p-value"]
-    
-
-    stockStats = pd.DataFrame.from_dict(mainData)
-    stockStats.insert(0,"Statistics", statistics)
-    
-    print(tabulate(stockStats, headers = tickerList, tablefmt="rst", showindex=False))
 
 def stockReturns(tickerList):
+    """
+    Returns a dictionary with the tickers and their respective returns as a list
+    """
+
     returnsData = {}
     for ticker in tickerList:
         
@@ -69,7 +70,7 @@ def stockReturns(tickerList):
         prices = data["adjclose"].tolist()
         returns = []
 
-        for i in range(0, len(prices)-1):
+        for i in range(0, len(prices)-1): # -1 because it references a date and the next one so last date is impossible to calculate
             returns.append(float((prices[i+1]/prices[i])-1))
     
         returnsData[ticker]=returns
@@ -77,32 +78,39 @@ def stockReturns(tickerList):
     return returnsData
 
 def stockReturnsList(tickerList):
-    
+    """
+    Returns a dataframe with all the stocks returns
+    """
+
     data = yf.get_data(tickerList[0], start_date="08/31/2004",end_date="10/31/2019", interval="1mo") # DATE IS MM/DD/YYYY
     
-    del data["open"], data["close"], data["high"], data["low"], data["volume"], data["ticker"]
+    del data["open"], data["close"], data["high"], data["low"], data["volume"], data["ticker"] # deletes all but one column 
     
     for ticker in tickerList:
         datax = yf.get_data(ticker, start_date="08/31/2004",end_date="10/31/2019", interval="1mo") # DATE IS MM/DD/YYYY
         prices = datax["adjclose"].tolist()
-        returns = [None]
+        returns = [None] #adds None as first element to easily integrate the returns into the dataframe. weird solution but works
     
         for i in range(0, len(prices)-1):
             returns.append(float((prices[i+1]/prices[i])-1))
         
         data[ticker]=returns
    
-    del data["adjclose"]
-    data.drop(data.head(1).index,inplace=True)
+    del data["adjclose"] #deletes extra column
+    data.drop(data.head(1).index,inplace=True) #removes None line
     return data
 
 def stockReturnsforSingle(ticker):
+    """
+    Returns dataframe with the returns for only 1 ticker 
+    """
+    
     data = yf.get_data(ticker, start_date="08/31/2004",end_date="10/31/2019", interval="1mo") # DATE IS MM/DD/YYYY
     
     del data["open"], data["close"], data["high"], data["low"], data["volume"], data["ticker"]
     
     prices = data["adjclose"].tolist()
-    returns = [None]
+    returns = [None] #adds None as first element to easily integrate the returns into the dataframe. weird solution but works
     
     for i in range(0, len(prices)-1):
         returns.append(float((prices[i+1]/prices[i])-1))
@@ -114,4 +122,4 @@ def stockReturnsforSingle(ticker):
     return data
 
 if __name__=="__main__":
-    print(stockStatisticsTabulate(tickers))
+    print(stockStatisticsTable(tickers))

@@ -1,11 +1,15 @@
 import pandas as pd
-from portfolioActualReturns import portfolioActualReturns, singleStockActualReturns
+from portfolioActualReturns import singleStockActualReturns
 from marketRiskPremium import marketActualReturns
 import statsmodels.api as sm
+
 
 tickers = ["AAPL","GOOG","AMZN","MSFT","INTC","IBM","ORCL","CSCO","NVDA"]
 
 def singleStockLinearRegression_Summary(ticker):
+    """
+    Returns a summary for the Linear Regression of a single stock, just like in excel
+    """
     
     stockReturns = singleStockActualReturns(ticker) 
     market = marketActualReturns()
@@ -14,19 +18,21 @@ def singleStockLinearRegression_Summary(ticker):
     df = pd.DataFrame.from_dict(data)
 
     Y = df[ticker]
-    X=df["S&P500"]
+    X= df["S&P500"]
 
     X = sm.add_constant(X)
 
-    model = sm.OLS(Y,X).fit()
+    model = sm.OLS(Y,X).fit() # Regression Model
 
     summary = model.summary()
 
     return summary
 
 
-
 def singleStockLinearRegression_Stats(ticker):
+    """
+    Returns the regression stats as a list for a single ticker. Stats are Alpha, Beta, p-values for each and R^2
+    """
     stockReturns = singleStockActualReturns(ticker)
     market = marketActualReturns()
     
@@ -53,7 +59,11 @@ def singleStockLinearRegression_Stats(ticker):
 
     return [alpha_beta,p_values,r_squared]
 
-def singleStockLinearRegression_StatsOutput(ticker): #wont accept just the stock
+def singleStockLinearRegression_StatsOutput(ticker): 
+    """
+    Displays the statistical results explained above
+    """
+
     stockReturns = singleStockActualReturns(ticker)
     market = marketActualReturns()
 

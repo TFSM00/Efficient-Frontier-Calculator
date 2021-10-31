@@ -1,40 +1,31 @@
 from stockStatistics import stockStatistics
 import pandas as pd
-from tabulate import tabulate
 
 tickers = ["AAPL","GOOG","AMZN","MSFT","INTC","IBM","ORCL","CSCO","NVDA"]
 
 def Average_StdDev_Data(tickerList):
+    """
+    Returns a dataframe with the average and std. deviation for every ticker
+    """
+    
     data = stockStatistics(tickerList)
 
     average = []
     stdev = []
 
     for key in data.keys():
-        average.append(data.get(key)[0])
-        stdev.append(data.get(key)[1])
+        average.append(data.get(key)[0]) #average is first value
+        stdev.append(data.get(key)[1]) #stdev is the second value 
 
     table = pd.DataFrame([average,stdev], index=["Expected Return Rate","Standard Deviation"],columns=tickerList)
     
     return table
 
-def Average_StdDev_Tabulate(tickerList):
-    data = stockStatistics(tickerList)
-
-    average = []
-    stdev = []
-
-    for key in data.keys():
-        average.append(data.get(key)[0])
-        stdev.append(data.get(key)[1])
-
-    table = pd.DataFrame([average,stdev], index=["Expected Return Rate","Standard Deviation"],columns=tickerList)
-    
-    
-    print(tabulate(table,headers=tickerList,tablefmt="rst"))
-
-
 def stdDeviation(tickerList):
+    """
+    Returns the standard deviations as a list
+    """
+
     data = stockStatistics(tickerList)
     stdev = []
     for key in data.keys():
@@ -43,6 +34,10 @@ def stdDeviation(tickerList):
     return stdev
 
 def average(tickerList):
+    """
+    Returns the averages as a list
+    """
+    
     data = stockStatistics(tickerList)
     average = []
     for key in data.keys():
@@ -51,4 +46,4 @@ def average(tickerList):
     return average
 
 if __name__ == '__main__':
-    Average_StdDev_Tabulate(tickers)
+    Average_StdDev_Data(tickers)

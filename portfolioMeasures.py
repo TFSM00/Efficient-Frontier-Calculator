@@ -8,10 +8,15 @@ import math
 tickers = ["AAPL","GOOG","AMZN","MSFT","INTC","IBM","ORCL","CSCO","NVDA"]
 
 def portfolioMeasuresEqualWeights(tickerList):
+    """
+    Returns a dict with some statistics calculated for the whole portfolio assuming equal weights 
+    Measures are: variance, std. deviation, expected return and sharpe ratio
+    """
+    
     wgtCov = weightedCovarianceEqualWeights(tickerList)
     portfolioVariance = 0
 
-    for i in range(0,len(tickerList)):
+    for i in range(0,len(tickerList)): # Portfolio variance is the sum of all stock pair variances
         for j in range(0,len(tickerList)):
             item = wgtCov.iloc[i,j]
             portfolioVariance += float(item)
@@ -20,7 +25,7 @@ def portfolioMeasuresEqualWeights(tickerList):
 
     weights = []
         
-    for i in range(0,len(tickerList)):
+    for i in range(0,len(tickerList)): # Adds the correct weights as a list
         weights.append(float(1/len(tickerList)))
 
     avg = average(tickerList)
@@ -38,6 +43,10 @@ def portfolioMeasuresEqualWeights(tickerList):
 
 
 def portfolioMeasuresWeighted(tickerList,weights):
+    """
+    Returns the same measures but for a specific weight for each stock as a dict
+    """
+    
     if len(tickerList) != len(weights):
         return print("The number of tickerList and number of weights are different")
     elif round(sum(weights),8) != round(1,8):
@@ -67,6 +76,10 @@ def portfolioMeasuresWeighted(tickerList,weights):
 
 
 def portfolioMeasures(tickerList,weights):
+    """
+    Returns same measures as a dataframe
+    """
+
     if len(tickerList) != len(weights):
         return print("The number of tickerList and number of weights are different")
     elif round(sum(weights),8) != round(1,8):

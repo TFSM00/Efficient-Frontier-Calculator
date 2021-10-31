@@ -5,6 +5,10 @@ import statistics as stats
 market = "^GSPC"
 
 def marketStats(ticker):   
+    """
+    Returns market average and std. dev as a dict
+    """
+    
     data = yf.get_data(ticker, start_date="08/31/2004",end_date="10/31/2019", interval="1mo") # DATE IS MM/DD/YYYY
     
     prices = data["adjclose"].tolist()
@@ -19,11 +23,19 @@ def marketStats(ticker):
     return {"Average": average, "Standard Deviation": standardDeviation}
 
 def getMarketPrice():
+    """
+    Gets the raw data for the market
+    """
+    
     data = yf.get_data("^GSPC", start_date="08/31/2004",end_date="10/31/2019", interval="1mo") # DATE IS MM/DD/YYYY
 
     return data
 
-def marketReturns():   
+def marketReturns(): 
+    """
+    Returns the market's returns as a list
+    """  
+    
     data = yf.get_data("^GSPC", start_date="08/31/2004",end_date="10/31/2019", interval="1mo") # DATE IS MM/DD/YYYY
     
     prices = data["adjclose"].tolist()
@@ -35,6 +47,10 @@ def marketReturns():
     return returns
 
 def marketReturnswithDates():
+    """
+    Returns the market's returns as a dataframe
+    """
+    
     data = yf.get_data("^GSPC", start_date="08/31/2004",end_date="10/31/2019", interval="1mo") # DATE IS MM/DD/YYYY
     
     del data["open"], data["close"], data["high"], data["low"], data["volume"], data["ticker"]

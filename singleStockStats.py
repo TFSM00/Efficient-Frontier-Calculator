@@ -6,6 +6,9 @@ import scipy.stats as st
 ticker = "AAPL"
 
 def getStockStats(ticker):
+    """
+    Returns stats for a single ticker
+    """
 
     data = yf.get_data(ticker, start_date="08/31/2004",end_date="10/31/2019", interval="1mo") # DATE IS MM/DD/YYYY
 
