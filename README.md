@@ -6,10 +6,11 @@ This project was inspired by an assignment given to students in a **Financial In
 
 ## TODO
 
-1. Make script to check if the program is given at least 150 months
-2. Make a file to join all scripts together (possible use of classes)
-3. Add GUI and/or Web App with Flask
-4. Optimize for speed
+1. Find a way to make a efficient frontier
+2. Make script to check if the program is given at least 150 months
+3. Make a file to join all scripts together (possible use of classes)
+4. Add GUI and/or Web App with Flask
+5. Optimize for speed
 
 
 
