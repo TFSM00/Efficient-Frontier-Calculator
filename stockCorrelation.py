@@ -1,7 +1,9 @@
 from stockStatistics import stockReturns
 import numpy as np
 import pandas as pd
-from tabulate import tabulate
+import seaborn as sns
+import matplotlib.pyplot as plt
+
 
 tickers = ["AAPL","GOOG","AMZN","MSFT","INTC","IBM","ORCL","CSCO","NVDA"]
 
@@ -26,6 +28,15 @@ def stockCorrelation(tickerList):
     
     return correlation_table
 
+def stockCorrelationHeatMap(tickerList):
+    correlation = stockCorrelation(tickerList)
+
+    plt.figure(figsize=(12.2,12.2))
+    sns.heatmap(correlation, annot=True)
+    plt.title("Correlation Matrix", fontsize=18)
+    plt.xlabel("Stocks", fontsize=14)
+    plt.ylabel("Stocks", fontsize=14)
+    plt.show()
 
 if __name__ == "__main__":
-    stockCorrelation(tickers)
+    stockCorrelationHeatMap(tickers)
