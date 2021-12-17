@@ -15,7 +15,7 @@ cov_matrix = stockCovariance(tickers)
 df = Average_StdDev_Data(tickers)
 rf = TB3MS_Data().get("Last Effective Monthly Rate")
 
-num_assets = 9
+num_assets = len(tickers)
 num_portfolios = 10000
 for portfolio in range(num_portfolios):
     weights = np.random.random(num_assets)
@@ -27,7 +27,7 @@ for portfolio in range(num_portfolios):
     sd = np.sqrt(var) # Daily standard deviation
     p_vol.append(sd)
 
-data = {'Returns':p_ret, 'Volatility':p_vol}
+data = {'Returns':np.array(p_ret), 'Volatility':np.array(p_vol)}
 
 for counter, symbol in enumerate(df.columns.tolist()):
     data[symbol+' weight'] = [w[counter] for w in p_weights]
@@ -61,3 +61,8 @@ plt.colorbar(main)
 plt.legend()
 
 plt.show()
+
+print("Lowest Risk Portfolio:\n")
+print(min_vol_port)
+print("\nHighest Sharpe Ratio Portfolio:\n")
+print(optimal_risky_port)
