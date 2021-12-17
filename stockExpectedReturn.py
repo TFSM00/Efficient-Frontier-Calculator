@@ -18,7 +18,7 @@ def Average_StdDev_Data(tickerList):
         stdev.append(data.get(key)[1]) #stdev is the second value 
 
     table = pd.DataFrame([average,stdev], index=["Expected Return Rate","Standard Deviation"],columns=tickerList)
-    
+
     return table
 
 def stdDeviation(tickerList):
@@ -46,4 +46,4 @@ def average(tickerList):
     return average
 
 if __name__ == '__main__':
-    Average_StdDev_Data(tickers)
+    print(Average_StdDev_Data(tickers))
