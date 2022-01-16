@@ -60,9 +60,9 @@ plt.grid()
 plt.colorbar(main)
 plt.legend()
 
-plt.show()
-
 print("Lowest Risk Portfolio:\n")
 print(min_vol_port)
 print("\nHighest Sharpe Ratio Portfolio:\n")
 print(optimal_risky_port)
+plt.show()
+
