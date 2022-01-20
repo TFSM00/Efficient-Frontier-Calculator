@@ -6,12 +6,25 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
 from dateutil import relativedelta as rd
-from scipy import stats
 import statsmodels.api as sm
-from statsmodels import regression
 from sklearn.linear_model import LinearRegression
 from statsmodels.regression.rolling import RollingOLS
 import getFamaFrenchFactors as gff
+
+def ticker_check(tickers, start_date, end_date):
+    res = []
+    for i in tickers:
+        try:
+            data = pdr.get_data_yahoo(i, start_date, end_date)
+            res.append(True)
+        except:
+            res.append(False)
+    
+    if all(res):
+        return True
+    return False
+        
+
 
 def riskFreeRate():
     ff3 = gff.famaFrench3Factor(frequency="m")
@@ -44,28 +57,37 @@ def beta_rolling(tickers, start_date, end_date, window):
 
 
     fig, ax = plt.subplots()
-    plt.plot(betas, label=betas.columns)
+    if len(list(betas.columns))==1:
+        plt.plot(betas, label= list(betas.columns)[0])
+    else:
+        plt.plot(betas, label=list(betas.columns))
     ax.legend()
     ax.set(title="Rolling Beta", xlabel="Date", ylabel="Beta")
     
     return fig
 
 
-
 def correlation(tickers, start_date, end_date):
     new_tickers = tickers
     new_tickers.append("^GSPC")
     
+
     data = pdr.get_data_yahoo(tickers, start_date, end_date, interval="m")
+
     data = data["Adj Close"]
     
     log_returns = np.log(data/data.shift())
     correlation = log_returns.corr()
-    correlation.rename(columns={"^GSPC":"S&P500"})
+    corr = pd.DataFrame(correlation)
+
+    corr = corr.rename(columns = {"^GSPC":"S&P500"})
+    corr = corr.T
+    corr = corr.rename(columns = {"^GSPC":"S&P500"})
 
     fig, ax = plt.subplots()
-    sns.heatmap(correlation, annot=True)
+    sns.heatmap(corr, annot=True)
     ax.set(title="Correlation Matrix", xlabel="Tickers", ylabel="Tickers")
+    
 
     return fig
 
@@ -122,7 +144,7 @@ def efficientFrontier(tickers, start_date, end_date):
     fig.colorbar(main, label="Sharpe Ratio")
 
     return fig
- 
+
 
 def beta(tickers, start_date, end_date):
     new_tickers = tickers
@@ -155,6 +177,7 @@ def beta(tickers, start_date, end_date):
         
     del data["^GSPC"]
     return data
+    
 
 def securityMarketLine(tickers, start_date, end_date):
     beta_table = beta(tickers, start_date, end_date).T
@@ -172,10 +195,10 @@ def securityMarketLine(tickers, start_date, end_date):
     for i in ticks:
         ax.scatter(beta_table["Beta"][i], beta_table["Expected Return"][i], label=i)
     
-    sml = ax.plot([0, 2],[risk_free, 2 * mkt_premium + risk_free ], label="Security Market Line", c="red")
+    sml = ax.plot([0, beta_table["Beta"].max()+0.2],[risk_free, 2 * mkt_premium + risk_free ], label="SML", c="red")
     ax.axhline(0,color='black') # x = 0
     ax.axvline(0,color='black') # y = 0
-    ax.legend()
+    ax.legend(loc="upper left")
     ax.set(title="Security Market Line")
     ax.set_xlabel("Beta")
     ax.set_ylabel("Expected Return")
@@ -183,44 +206,44 @@ def securityMarketLine(tickers, start_date, end_date):
 
     return fig
 
+#st.set_page_config(layout="wide")
 
-    
-
-
-st.set_page_config(layout="wide")
-
-ticker_input = st.sidebar.text_input("Enter the tickers space-separated")
+sidebar_title = st.sidebar.header("Portfolio Efficient Frontier")
+author = st.sidebar.write("Made by Tiago Moreira")
+space = st.sidebar.header("")
+ticker_input = st.sidebar.text_input("Enter the tickers space-separated:")
 tickers = ticker_input.strip()
 tickers = tickers.split(" ")
-for i in tickers:
-    if i.isspace() or len(i)<1:
-        del tickers[tickers.index(i)]
+
+while("" in tickers):
+    tickers.remove("")
+
     
-start_date = st.sidebar.date_input('Start date (format=DD/MM/YYYY)', min_value=dt.datetime(1950,1,1))
-end_date = st.sidebar.date_input('End date (format=DD/MM/YYYY)', max_value=dt.datetime.today())
+start_date = st.sidebar.date_input('Select a starting date:', min_value=dt.datetime(1950,1,1))
+end_date = st.sidebar.date_input('Select an ending date:', max_value=dt.datetime.today())
 month_delta = rd.relativedelta(end_date,start_date).years * 12
-beta_window = st.sidebar.slider("Rolling Beta Window", 1, int(month_delta/4))
+beta_window = st.sidebar.slider("Beta rolling window (in months)", 1, int(month_delta/4))
 run_button = st.sidebar.button("Run calculations")
 
-# Conflict between Beta Function and Efficient Frontier
 
-with st.spinner(text='In progress'):
+with st.spinner(text='In progress - wait for calculations to complete in order to scroll down'):
     if run_button:
-        if start_date < end_date:
-            st.sidebar.success('Start date: `%s`\n\nEnd date: `%s`' % (start_date, end_date))
-            st.header("Financial Analysis Toolkit")
-            st.subheader("Made by Tiago Moreira")
-            st.subheader("Correlation between chosen stocks and the market")
-            st.pyplot(correlation(tickers, start_date, end_date))
-            st.subheader("Efficient Frontier")
-            st.pyplot(efficientFrontier(tickers, start_date, end_date))  #add capital market line radio button
-            st.subheader("Alpha and Beta Statistics")
-            st.table(beta(tickers, start_date, end_date))
-            st.subheader("Security Market Line")
-            st.pyplot(securityMarketLine(tickers, start_date, end_date))
-            st.subheader("Rolling Beta")
-            st.pyplot(beta_rolling(tickers,start_date, end_date, beta_window))
-            #st.write("Beware: Rolling window starts on the date of the latest of the stocks to enter the market.")
-            #st.dataframe(log_rets(tickers, start_date, end_date))
+        if not ticker_check(tickers, start_date, end_date):
+            st.sidebar.error("Error: one of the tickers used does not exist or was misspelled")
         else:
-            st.sidebar.error('Error: End date must fall after start date.')
+            if start_date < end_date:
+                #st.sidebar.success('Start date: `%s`\n\nEnd date: `%s`' % (start_date, end_date))
+                if month_delta<12:
+                    st.sidebar.warning("Warning: at least a year of data is necessary for more accurate calculations")
+                st.subheader("Correlation Matrix")
+                st.pyplot(correlation(tickers, start_date, end_date))
+                st.subheader("Efficient Frontier")
+                st.pyplot(efficientFrontier(tickers, start_date, end_date))  #add capital market line radio button
+                st.subheader("Alpha and Beta Statistics")
+                st.table(beta(tickers, start_date, end_date))
+                st.subheader("Security Market Line")
+                st.pyplot(securityMarketLine(tickers, start_date, end_date))
+                st.subheader("Rolling Beta")
+                st.pyplot(beta_rolling(tickers,start_date, end_date, beta_window))
+            else:
+                st.sidebar.error('Error: End date must fall after start date')
