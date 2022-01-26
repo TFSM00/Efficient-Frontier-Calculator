@@ -25,9 +25,10 @@ def get_returns(tickers, start_date, end_date):
     temp_ticks = tickers.copy()
     temp_ticks.append("^GSPC")
     try:
-        data = pdr.get_data_yahoo(temp_ticks, start_date, end_date, interval="m")
+        data = pdr.get_data_yahoo(temp_ticks, start_date, end_date, interval="m")      
     except:
         err = pd.DataFrame()
+        #err.name = "Ticker error"
         return err
     
     data = data["Adj Close"]
@@ -184,6 +185,13 @@ beta_window = st.sidebar.slider("Beta rolling window (in months)", 2, int(month_
 run_button = st.sidebar.button("Run calculations")
 
 data = get_returns(input_tickers, start_date, end_date)
+not_a_number_error = False
+
+if data.isna().values.any():
+    data = data.dropna()
+    not_a_number_error = True
+
+
 rf, mkt_premium = riskFreeRate()
 
 
@@ -197,14 +205,17 @@ with st.spinner(text='In progress - wait for calculations to complete in order t
                 #st.sidebar.success('Start date: `%s`\n\nEnd date: `%s`' % (start_date, end_date))
                 if month_delta<12:
                     st.sidebar.warning("Warning: at least a year of data is necessary for more accurate calculations")
-                # st.subheader("Correlation Matrix")
-                # st.pyplot(correlation(data))
-                # st.subheader("Efficient Frontier")
-                # st.pyplot(efficientFrontier(data, rf))  #add capital market line radio button
-                # st.subheader("Alpha and Beta Statistics")
-                # st.table(beta(data))
-                # st.subheader("Security Market Line")
-                # st.pyplot(securityMarketLine(data, rf, mkt_premium))
+                elif not_a_number_error == True:
+                    st.sidebar.warning("One or multiple tickers only have price data after the set start date. All calculations will be made starting from the earliest date with price data")
+                
+                st.subheader("Correlation Matrix")
+                st.pyplot(correlation(data))
+                st.subheader("Efficient Frontier")
+                st.pyplot(efficientFrontier(data, rf))  #add capital market line radio button
+                st.subheader("Alpha and Beta Statistics")
+                st.table(beta(data))
+                st.subheader("Security Market Line")
+                st.pyplot(securityMarketLine(data, rf, mkt_premium))
                 st.subheader("Rolling Beta")
                 st.pyplot(beta_rolling(data, beta_window))
                 #st.sidebar.write(f"{time.time()-timer_s} seconds")
