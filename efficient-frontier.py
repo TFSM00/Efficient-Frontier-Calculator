@@ -10,16 +10,30 @@ import statsmodels.api as sm
 from sklearn.linear_model import LinearRegression
 from statsmodels.regression.rolling import RollingOLS
 import getFamaFrenchFactors as gff
-#import time
 from matplotlib.dates import YearLocator, MonthLocator, DateFormatter
         
-def riskFreeRate():
+def nearest(items, pivot):
+    return min(items, key=lambda x: abs(x - pivot))
+
+def riskFreeRate(start_date, end_date):
     ff3 = gff.famaFrench3Factor(frequency="m")
     ff3 = ff3.set_index("date_ff_factors")
-    riskfree = ff3["RF"][-1]
-    mkt_premium = ff3["Mkt-RF"][-1]
+    index = ff3.index.tolist()
 
-    return riskfree, mkt_premium
+    near_st = nearest(index, pd.Timestamp(start_date))
+    near_end = nearest(index,pd.Timestamp(end_date))
+
+    start_ind = index.index(near_st)
+    end_ind = index.index(near_end) + 1
+
+    rfs = ff3["RF"][start_ind : end_ind]
+    mkt_premiums = ff3["Mkt-RF"][start_ind : end_ind]
+    
+    riskfree = rfs.mean()
+    mkt_p = mkt_premiums.mean()
+
+    return riskfree, mkt_p
+
 
 def get_returns(tickers, start_date, end_date):
     temp_ticks = tickers.copy()
@@ -165,7 +179,7 @@ def beta_rolling(log_rets, window):
     plt.grid()
     return fig
 
-
+st.set_page_config(page_title="Efficient Frontier")
 
 sidebar_title = st.sidebar.header("Portfolio Efficient Frontier")
 author = st.sidebar.write("Made by Tiago Moreira")
@@ -192,7 +206,7 @@ if data.isna().values.any():
     not_a_number_error = True
 
 
-rf, mkt_premium = riskFreeRate()
+rf, mkt_premium = riskFreeRate(start_date, end_date)
 
 
 with st.spinner(text='In progress - wait for calculations to complete in order to scroll down'):
@@ -206,8 +220,8 @@ with st.spinner(text='In progress - wait for calculations to complete in order t
                 if month_delta<12:
                     st.sidebar.warning("Warning: at least a year of data is necessary for more accurate calculations")
                 elif not_a_number_error == True:
-                    st.sidebar.warning("One or multiple tickers only have price data after the set start date. All calculations will be made starting from the earliest date with price data")
-                
+                    st.sidebar.warning("A ticker only as price data after the set start date. All calculations will be made starting from the latest date with price data.")
+                      
                 st.subheader("Correlation Matrix")
                 st.pyplot(correlation(data))
                 st.subheader("Efficient Frontier")
