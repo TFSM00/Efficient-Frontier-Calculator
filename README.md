@@ -1,7 +1,15 @@
 <h1 align="center">Efficient Frontier Calculator</h1>
 
+<p align="center">
+    <a href="https://share.streamlit.io/tfsm00/markowitz-efficient-frontier/main/efficient-frontier.py">
+        <img src="https://static.streamlit.io/badges/streamlit_badge_black_white.svg">
+    </a>
+    <a href="https://github.com/TFSM00/Efficient-Frontier-Calculator/blob/main/LICENSE.txt">
+        <img src="https://img.shields.io/github/license/TFSM00/Efficient-Frontier-Calculator">
+    </a>
+    <img src="https://img.shields.io/badge/Made%20with-Python-1f425f.svg">
+</p>
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/tfsm00/markowitz-efficient-frontier/main/efficient-frontier.py)
 
 ## **Project Description**
 ---
@@ -31,8 +39,9 @@ In the example below, the tickers for `Apple Inc.`, `Microsoft Corp.` and `Inter
 
 <br>
 
-<img src="./images/ticker_insert.png" style="width: 250px; height:auto; display: block; margin-left: auto; margin-right: auto;">
-
+<p align="center">
+<img src="./images/ticker_insert.png" width="250px">
+</p>
 <br>
 
 ### Date Input
@@ -40,14 +49,17 @@ In the example below, the tickers for `Apple Inc.`, `Microsoft Corp.` and `Inter
 
 This is where a start and end date are to be selected. Obviously, the **start date must be earlier than the end date**. For a result with better accuracy, **the time period should be of, at least, 1 year**.
 
-If one of the **date input boxes** is clicked (image on the left), a **calendar widget** will appear (image on the right), making it easier to select a date.
+<p align="center">
+    <img align=top src="./images/dates.png" width="250px">
+</p>
+
+If one of the **date input boxes** is clicked (image above), a **calendar widget** will appear (image below), making it easier to select a date.
 
 <br>
 
-<div style="display:flex; align-items: center; justify-content: center; gap: 50px">
-<img src="./images/dates.png" style="width: 250px; height:auto;">
-<img src="./images/dates2.png" style="width: 200px; height:auto;">
-</div>
+<p align="center">
+    <img align=top src="./images/dates2.png" width="250px">
+</p>
 
 <br>
 
@@ -71,7 +83,9 @@ This one is straightforward. After making sure all the other inputs explained be
 
 <br>
 
-<img src="./images/calcs.png" style="width: 150px; height:auto; display: block; margin-left: auto; margin-right: auto;">
+<p align="center">
+    <img src="./images/calcs.png" width="150px">
+</p>
 
 <br>
 
@@ -89,5 +103,9 @@ This one is straightforward. After making sure all the other inputs explained be
 
 * The alpha and beta statistics are obtained through a linear regression between the returns of each asset and the market.
 
-## **Licence**
+## 📝 **Licence**
+---
+
+Copyright © 2019 [Tiago Moreira](https://github.com/TFSM00).<br />
+This project is [MIT](https://github.com/TFSM00/Efficient-Frontier-Calculator/blob/main/LICENSE.txt) licensed.
 
