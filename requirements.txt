@@ -3,6 +3,7 @@ aiosignal==1.2.0
 altair==4.1.0
 anaconda==0.0.1.1
 appdirs==1.4.4
+apturl==0.5.2
 argon2-cffi==21.3.0
 argon2-cffi-bindings==21.2.0
 astor==0.8.1
