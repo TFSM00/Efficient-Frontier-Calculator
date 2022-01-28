@@ -48,6 +48,7 @@ def get_returns(tickers, start_date, end_date):
     data = data["Adj Close"]
 
     log_returns = np.log(data/data.shift())
+    log_returns = log_returns[1:]
     return log_returns
 
 def correlation(log_rets):
@@ -89,7 +90,7 @@ def efficientFrontier(log_rets, rf):
 
     main = ax.scatter(exp_vols,exp_rtns, c=sharpe_ratios)
     ax.scatter(exp_vols[sharpe_ratios.argmax()], exp_rtns[sharpe_ratios.argmax()], c="red", label="Highest Sharpe Ratio Portfolio")
-    ax.scatter(exp_vols[exp_vols.argmin()], exp_rtns[exp_vols.argmin()], c="orange", label="Minimum Risk Portfolio")
+    ax.scatter(exp_vols[exp_vols.argmin()], exp_rtns[exp_vols.argmin()], c="orange", label="Minimum Volatility Portfolio")
     ax.legend(prop={'size': 8})
     #ax.set_ylim(0)
     ax.set(title="Efficient Frontier")
@@ -97,8 +98,25 @@ def efficientFrontier(log_rets, rf):
     ax.set_ylabel("Expected Return")
     ef_fig.colorbar(main, label="Sharpe Ratio")
     plt.grid()
+    
+    weights_max = list(weights[sharpe_ratios.argmax()])
+    weights_min = list(weights[sharpe_ratios.argmin()])
+    weights_ret = list(weights[exp_rtns.argmax()])
+    weights_vol = list(weights[exp_vols.argmax()])
 
-    return ef_fig
+    max_port = [exp_rtns[sharpe_ratios.argmax()], exp_vols[sharpe_ratios.argmax()], sharpe_ratios.max()] + weights_max
+    min_port = [exp_rtns[exp_vols.argmin()], exp_vols[exp_vols.argmin()], sharpe_ratios[exp_vols.argmin()]] + weights_min
+    ret_port = [exp_rtns.max(), exp_vols[exp_rtns.argmax()], sharpe_ratios[exp_rtns.argmax()]] + weights_ret
+    vol_port = [exp_rtns[exp_vols.argmax()], exp_vols.max(), sharpe_ratios[exp_vols.argmax()]] + weights_vol
+    index_line = ["Expected Return","Expected Volatility", "Sharpe Ratio"] + [f"{i} Weight" for i in input_tickers]
+    ports = pd.DataFrame(index=index_line)
+    ports["Highest Sharpe Ratio Portfolio"] = max_port
+    ports["Minimum Volatility Portfolio"] = min_port
+    ports["Highest Expected Return Portfolio"] = ret_port
+    ports["Highest Expected Volatility Portfolio"] = vol_port
+    
+
+    return [ef_fig, ports.T]
 
 def beta(log_rets):
     log_returns_beta = log_rets.copy()
@@ -144,7 +162,7 @@ def securityMarketLine(log_rets, rf, mkt_premium):
 
     return fig
 
-def beta_rolling(log_rets, window):
+def beta_rolling(log_rets, win):
     log_returns_br = log_rets.copy()
 
     betas = pd.DataFrame()
@@ -154,7 +172,7 @@ def beta_rolling(log_rets, window):
         X = log_returns_br["^GSPC"]
                 
         x = sm.add_constant(X)
-        rols = RollingOLS(Y,x, window)
+        rols = RollingOLS(Y,x, win, min_nobs=1)
         rres = rols.fit()
         params = rres.params.copy()
         betas[i] = params["^GSPC"]
@@ -165,8 +183,8 @@ def beta_rolling(log_rets, window):
         plt.plot(betas, label= list(betas.columns)[0])
     else:
         plt.plot(betas, label=list(betas.columns))
-    years = YearLocator()   # every year
-    months = MonthLocator()  # every month
+    years = YearLocator(2)   # every year
+    months = MonthLocator(6)  # every month
     yearsFmt = DateFormatter('%Y')
     ax.legend(prop={'size': 8})
     ax.set(title="Rolling Beta", xlabel="Date", ylabel="Beta")
@@ -185,6 +203,8 @@ sidebar_title = st.sidebar.header("Portfolio Efficient Frontier")
 author = st.sidebar.write("Made by Tiago Moreira")
 space = st.sidebar.header("")
 ticker_input = st.sidebar.text_input("Enter the tickers space-separated:")
+tick_sugg = st.sidebar.markdown("##### Want help finding tickers? Click [here](https://www.finance.yahoo.com) and search for a company!")
+st.sidebar.write("")
 input_tickers = ticker_input.strip()
 input_tickers = input_tickers.split(" ")
 
@@ -192,7 +212,7 @@ while("" in input_tickers):
     input_tickers.remove("")
 
     
-start_date = st.sidebar.date_input('Select a starting date:', min_value=dt.datetime(1950,1,1))
+start_date = st.sidebar.date_input('Select a starting date:', min_value=dt.datetime(1950,1,1), max_value=dt.datetime.today())
 end_date = st.sidebar.date_input('Select an ending date:', max_value=dt.datetime.today())
 month_delta = rd.relativedelta(end_date,start_date).years * 12
 beta_window = st.sidebar.slider("Beta rolling window (in months)", 2, int(month_delta/2))
@@ -200,8 +220,7 @@ run_button = st.sidebar.button("Run calculations")
 
 data = get_returns(input_tickers, start_date, end_date)
 not_a_number_error = False
-
-if data.isna().values.any():
+if data.isnull().values.any():
     data = data.dropna()
     not_a_number_error = True
 
@@ -219,13 +238,16 @@ with st.spinner(text='In progress - wait for calculations to complete in order t
                 #st.sidebar.success('Start date: `%s`\n\nEnd date: `%s`' % (start_date, end_date))
                 if month_delta<12:
                     st.sidebar.warning("Warning: at least a year of data is necessary for more accurate calculations")
-                elif not_a_number_error == True:
-                    st.sidebar.warning("A ticker only as price data after the set start date. All calculations will be made starting from the latest date with price data.")
+                
+                if not_a_number_error == True:
+                    st.sidebar.warning("Warning: a ticker only has price data after the set start date. All calculations will be made starting from the latest date with price data.")
                       
                 st.subheader("Correlation Matrix")
                 st.pyplot(correlation(data))
+                eff_fr = efficientFrontier(data, rf)
                 st.subheader("Efficient Frontier")
-                st.pyplot(efficientFrontier(data, rf))  #add capital market line radio button
+                st.pyplot(eff_fr[0])
+                st.table(eff_fr[1])
                 st.subheader("Alpha and Beta Statistics")
                 st.table(beta(data))
                 st.subheader("Security Market Line")
