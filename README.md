@@ -71,15 +71,16 @@ This a slider widget, where a month window is selected and used by the **rolling
 Essentially, if a 6 month window is selected, a beta is calculated from month 1 to 6, from month 2 to 7, and so on until the end of the timeframe.
 
 <br>
-
-<img src="./images/rolling_window.png" style="width: 250px; height:auto; display: block; margin-left: auto; margin-right: auto;">
+<p align="center">
+    <img src="./images/rolling_window.png" width="250px">   
+</p>
 
 <br>
 
 ### "Run Calculations" Button
 <br>
 
-This one is straightforward. After making sure all the other inputs explained before were used correctly, click it and wait a few seconds for the results to appear ().
+This one is straightforward. After making sure all the other inputs explained before were used correctly, click it and wait a few seconds for the results to appear (a 5 stock and 20 year calculation takes ~15 seconds).
 
 <br>
 
@@ -102,6 +103,11 @@ This one is straightforward. After making sure all the other inputs explained be
 * The efficient frontier is obtained from a Monte Carlo simulation of 5000 runs with random portfolio weights.
 
 * The alpha and beta statistics are obtained through a linear regression between the returns of each asset and the market.
+
+## **Issues and Suggestions**
+---
+<br>
+If you encounter an error in the program, a way to make code faster, any wrong application of financial formulas and concepts or just want to make a suggestion on how to make this project better raise a new issue [here](https://github.com/TFSM00/Efficient-Frontier-Calculator/issues/new/choose). 
 
 ## 📝 **Licence**
 ---
