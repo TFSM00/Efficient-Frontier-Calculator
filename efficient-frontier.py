@@ -11,6 +11,7 @@ from sklearn.linear_model import LinearRegression
 from statsmodels.regression.rolling import RollingOLS
 import getFamaFrenchFactors as gff
 from matplotlib.dates import YearLocator, MonthLocator, DateFormatter
+#import time
         
 def nearest(items, pivot):
     return min(items, key=lambda x: abs(x - pivot))
@@ -172,7 +173,7 @@ def beta_rolling(log_rets, win):
         X = log_returns_br["^GSPC"]
                 
         x = sm.add_constant(X)
-        rols = RollingOLS(Y,x, win, min_nobs=1)
+        rols = RollingOLS(Y,x, win)
         rres = rols.fit()
         params = rres.params.copy()
         betas[i] = params["^GSPC"]
