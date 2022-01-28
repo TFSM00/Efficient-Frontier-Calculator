@@ -12,7 +12,7 @@
 
 
 ## **Project Description**
----
+
 This a financial data science project that allows the user to obtain a efficient frontier graph for a specific portfolio of stocks as well as other portfolio performance indicators using monthly-based price data.
 
 It is a web-hosted interactive application, hosted using [Streamlit's](streamlit.io) Sharing functionality.
@@ -20,7 +20,7 @@ It is a web-hosted interactive application, hosted using [Streamlit's](streamlit
 The project can be found here: [Link to project](https://share.streamlit.io/tfsm00/markowitz-efficient-frontier/main/efficient-frontier.py)
 
 ## **Features**
----
+
 * Correlation Matrix
 * Efficient Frontier
 * Alpha and Beta Statistics
@@ -29,7 +29,7 @@ The project can be found here: [Link to project](https://share.streamlit.io/tfsm
 
 
 ## **Usage**
----
+
 
 ### Ticker Input
 <br>
@@ -91,8 +91,7 @@ This one is straightforward. After making sure all the other inputs explained be
 <br>
 
 ## **Facts and Assumptions**
----
-<br>
+
 
 * The most important assumption made in this project is that the Standard and Poor's 500 Index is used as market benchmark for all calculations as this project's main target are U.S. Equities.
 
@@ -105,12 +104,11 @@ This one is straightforward. After making sure all the other inputs explained be
 * The alpha and beta statistics are obtained through a linear regression between the returns of each asset and the market.
 
 ## **Issues and Suggestions**
----
-<br>
+
 If you encounter an error in the program, a way to make code faster, any wrong application of financial formulas and concepts or just want to make a suggestion on how to make this project better raise a new issue [here](https://github.com/TFSM00/Efficient-Frontier-Calculator/issues/new/choose). 
 
 ## 📝 **Licence**
----
+
 Copyright © 2019 [Tiago Moreira](https://github.com/TFSM00).<br />
 This project is [MIT](https://github.com/TFSM00/Efficient-Frontier-Calculator/blob/main/LICENSE.txt) licensed.
 
