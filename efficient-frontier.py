@@ -1,6 +1,6 @@
 import numpy as np
 import pandas_datareader as pdr
-import datetime as dt 
+import datetime as dt
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -11,8 +11,10 @@ from sklearn.linear_model import LinearRegression
 from statsmodels.regression.rolling import RollingOLS
 import getFamaFrenchFactors as gff
 from matplotlib.dates import YearLocator, MonthLocator, DateFormatter
+
 #import time
-        
+
+
 def nearest(items, pivot):
     return min(items, key=lambda x: abs(x - pivot))
 
@@ -29,7 +31,7 @@ def riskFreeRate(start_date, end_date):
 
     rfs = ff3["RF"][start_ind : end_ind]
     mkt_premiums = ff3["Mkt-RF"][start_ind : end_ind]
-    
+
     riskfree = rfs.mean()
     mkt_p = mkt_premiums.mean()
 
@@ -40,12 +42,12 @@ def get_returns(tickers, start_date, end_date):
     temp_ticks = tickers.copy()
     temp_ticks.append("^GSPC")
     try:
-        data = pdr.get_data_yahoo(temp_ticks, start_date, end_date, interval="m")      
+        data = pdr.get_data_yahoo(temp_ticks, start_date, end_date, interval="m")
     except:
         err = pd.DataFrame()
         #err.name = "Ticker error"
         return err
-    
+
     data = data["Adj Close"]
 
     log_returns = np.log(data/data.shift())
@@ -62,9 +64,9 @@ def correlation(log_rets):
     corr = corr.rename(columns = {"^GSPC":"S&P500"})
 
     fig, ax = plt.subplots()
-    sns.heatmap(corr, annot=True)
-    ax.set(title="Correlation Matrix", xlabel="Tickers", ylabel="Tickers")
-    
+    heatmap = sns.heatmap(corr, annot=True, cmap=plt.cm.RdYlGn, vmin=-1, vmax=1)
+    ax.set(title="Correlation Matrix", xlabel="", ylabel="")
+    ax.xaxis.tick_top()
 
     return fig
 
@@ -86,7 +88,7 @@ def efficientFrontier(log_rets, rf):
         exp_vols[i] = np.sqrt(np.dot(weight.T, np.dot(log_returns_ef.cov()*12*(252/365),weight)))
         sharpe_ratios[i] = (exp_rtns[i]-rf)/exp_vols[i]
 
-    
+
     ef_fig,ax = plt.subplots()
 
     main = ax.scatter(exp_vols,exp_rtns, c=sharpe_ratios)
@@ -99,7 +101,7 @@ def efficientFrontier(log_rets, rf):
     ax.set_ylabel("Expected Return")
     ef_fig.colorbar(main, label="Sharpe Ratio")
     plt.grid()
-    
+
     weights_max = list(weights[sharpe_ratios.argmax()])
     weights_min = list(weights[sharpe_ratios.argmin()])
     weights_ret = list(weights[exp_rtns.argmax()])
@@ -115,14 +117,14 @@ def efficientFrontier(log_rets, rf):
     ports["Minimum Volatility Portfolio"] = min_port
     ports["Highest Expected Return Portfolio"] = ret_port
     ports["Highest Expected Volatility Portfolio"] = vol_port
-    
+
 
     return [ef_fig, ports.T]
 
 def beta(log_rets):
     log_returns_beta = log_rets.copy()
     data = pd.DataFrame(index=["Alpha","Beta"])
-    
+
     for i in input_tickers:
         log_returns2 = pd.DataFrame([log_returns_beta[i],log_returns_beta["^GSPC"]])
         log_returns2 = log_returns2.T
@@ -138,7 +140,7 @@ def beta(log_rets):
         beta = lin_regr.coef_[0,0]
 
         data[i] = [alpha, beta]
-        
+
     return data
 
 def securityMarketLine(log_rets, rf, mkt_premium):
@@ -151,7 +153,7 @@ def securityMarketLine(log_rets, rf, mkt_premium):
     ticks = list(beta_table.index)
     for i in ticks:
         ax.scatter(beta_table["Beta"][i], beta_table["Expected Return"][i], label=i)
-    
+
     sml = ax.plot([0, beta_table["Beta"].max()+0.2],[rf, 2 * mkt_premium + rf ], label="SML", c="red")
     ax.axhline(0,color='black') # x = 0
     ax.axvline(0,color='black') # y = 0
@@ -171,7 +173,7 @@ def beta_rolling(log_rets, win):
     for i in input_tickers:
         Y = log_returns_br[i]
         X = log_returns_br["^GSPC"]
-                
+
         x = sm.add_constant(X)
         rols = RollingOLS(Y,x, win)
         rres = rols.fit()
@@ -184,8 +186,8 @@ def beta_rolling(log_rets, win):
         plt.plot(betas, label= list(betas.columns)[0])
     else:
         plt.plot(betas, label=list(betas.columns))
-    years = YearLocator(2)   # every year
-    months = MonthLocator(6)  # every month
+    years = YearLocator()   # every year
+    months = MonthLocator()  # every month
     yearsFmt = DateFormatter('%Y')
     ax.legend(prop={'size': 8})
     ax.set(title="Rolling Beta", xlabel="Date", ylabel="Beta")
@@ -212,7 +214,7 @@ input_tickers = input_tickers.split(" ")
 while("" in input_tickers):
     input_tickers.remove("")
 
-    
+
 start_date = st.sidebar.date_input('Select a starting date:', min_value=dt.datetime(1950,1,1), max_value=dt.datetime.today())
 end_date = st.sidebar.date_input('Select an ending date:', max_value=dt.datetime.today())
 month_delta = rd.relativedelta(end_date,start_date).years * 12
@@ -239,10 +241,10 @@ with st.spinner(text='In progress - wait for calculations to complete in order t
                 #st.sidebar.success('Start date: `%s`\n\nEnd date: `%s`' % (start_date, end_date))
                 if month_delta<12:
                     st.sidebar.warning("Warning: at least a year of data is necessary for more accurate calculations")
-                
+
                 if not_a_number_error == True:
                     st.sidebar.warning("Warning: a ticker only has price data after the set start date. All calculations will be made starting from the latest date with price data.")
-                      
+
                 st.subheader("Correlation Matrix")
                 st.pyplot(correlation(data))
                 eff_fr = efficientFrontier(data, rf)
