@@ -97,7 +97,7 @@ This one is straightforward. After making sure all the other inputs explained be
 
 * The returns are obtained using Yahoo Finance's Price Data and are logarithmic, not arithmetic.
 
-* The risk free rate and market premiums are obtained from E. Fama and K. French's 3 Factor data and are the values used are averages from the selected timeframe.
+* The risk free rate and market premiums are obtained from E. Fama and K. French's 3 Factor data and the values used are averages from the selected timeframe.
 
 * The efficient frontier is obtained from a Monte Carlo simulation of 5000 runs with random portfolio weights.
 
