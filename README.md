@@ -24,6 +24,15 @@ The project can be found here: [Link to project](https://share.streamlit.io/tfsm
 * Correlation Matrix
 * Efficient Frontier
 * Alpha and Beta Statistics
+* Performance Indicators
+    * Compound Annual Growth Rate
+    * Annualized Volatility
+    * Sharpe Ratio
+    * Sortino Ratio
+    * Calmar Ratio
+    * Max Drawdown
+    * Value at Risk
+    * Conditional Value at Risk
 * Security Market Line
 * Rolling Beta
 
@@ -42,16 +51,17 @@ In the example below, the tickers for `Apple Inc.`, `Microsoft Corp.` and `Inter
 <p align="center">
 <img src="./images/ticker_insert.png" width="250px">
 </p>
-<br>
 
 ### Date Input
 <br>
 
 This is where a start and end date are to be selected. Obviously, the **start date must be earlier than the end date**. For a result with better accuracy, **the time period should be of, at least, 1 year**.
 
+<br>
 <p align="center">
     <img align=top src="./images/dates.png" width="250px">
 </p>
+<br>
 
 If one of the **date input boxes** is clicked (image above), a **calendar widget** will appear (image below), making it easier to select a date.
 
@@ -87,8 +97,6 @@ This one is straightforward. After making sure all the other inputs explained be
 <p align="center">
     <img src="./images/calcs.png" width="150px">
 </p>
-
-<br>
 
 ## **Facts and Assumptions**
 
