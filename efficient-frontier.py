@@ -1,3 +1,4 @@
+from cmath import log
 import numpy as np
 import pandas_datareader as pdr
 import datetime as dt
@@ -200,6 +201,103 @@ def beta_rolling(log_rets, win):
     plt.grid()
     return fig
 
+def performance_indicators(log_rets, rf):
+    temp_tickers = input_tickers.copy()
+    temp_tickers.append("^GSPC")
+
+    def CAGR(log_rets):
+        log_rets_cagr = log_rets.copy()
+        log_rets_cagr = (1 + log_rets_cagr).cumprod()
+        trading_days = 12 * 252/365
+        n = len(log_rets_cagr)/trading_days
+        cagr = list((log_rets_cagr.iloc[-1])**(1/n) - 1)
+        return cagr
+
+    def annualizedVol(log_rets):
+        log_rets_ann_vol = log_rets.copy()
+        log_rets_ann_vol = np.log(log_rets_ann_vol/log_rets_ann_vol.shift())
+        trading_days = 12 * 252/365
+        vol = list(log_rets_ann_vol.std() * np.sqrt(trading_days))
+        return vol
+    
+    def sharpeRatio(log_rets, rf):
+        log_rets_sr = log_rets.copy()
+        sharpes = []
+        for i in range(0, len(input_tickers) + 1):  # here the 1 means S&P500
+            sharpes.append( (CAGR(log_rets_sr)[i] - rf)/annualizedVol(log_rets_sr)[i] )
+        
+        return sharpes
+    
+    def sortinoRatio(log_rets, rf):
+        log_rets_sortino = log_rets.copy()
+        sortino = np.log(log_rets_sortino/log_rets_sortino.shift())
+
+        sortino = np.where(sortino<0, sortino, 0)
+
+        sortino = pd.DataFrame(sortino, columns=temp_tickers)
+        negative_vol = list(sortino.std() * np.sqrt(252))
+        sortinos = []
+        for i in range(0,len(input_tickers) + 1):
+            sortinos.append( (CAGR(log_rets_sortino)[i] - rf)/negative_vol[i] )
+            
+        return sortinos
+
+    def maxDrawdown(log_rets):
+        log_rets_maxdd = log_rets.copy()
+
+        df_cum_rets = (1 + log_rets_maxdd).cumprod()
+        df_cum_max = df_cum_rets.cummax()
+        df_drawdown = df_cum_max - df_cum_rets
+        df_drawdown_pct = df_drawdown / df_cum_max
+        max_dd = df_drawdown_pct.max()
+
+        return max_dd
+
+    def calmarRatio(log_rets, rf):
+        log_rets_calmar = log_rets.copy()
+        calmars = []
+        for i in range(0, len(input_tickers) + 1):
+            calmars.append ( (CAGR(log_rets_calmar)[i] - rf) / maxDrawdown(data)[i] )
+        return calmars
+    
+    def valueAtRisk(log_rets):
+        log_rets_var = log_rets.copy()
+        log_rets_var = log_rets_var[1:]
+    
+        sorted_rets = pd.DataFrame(columns=temp_tickers)
+        for i in temp_tickers:
+            sorted_rets[i] = log_rets_var[i].sort_values(ascending=True)
+
+        var90s = []
+        var95s = []
+        var99s = []
+        cvar90s = []
+        cvar95s = []
+        cvar99s = []
+
+        for i in temp_tickers:
+            var90 = sorted_rets[i].quantile(0.1)
+            var95 = sorted_rets[i].quantile(0.05)
+            var99 = sorted_rets[i].quantile(0.01)
+            cvar90 = sorted_rets[i][sorted_rets[i] <= var90].mean()
+            cvar95 = sorted_rets[i][sorted_rets[i] <= var95].mean()
+            cvar99 = sorted_rets[i][sorted_rets[i] <= var99].mean()
+            var90s.append(var90)
+            var95s.append(var95)
+            var99s.append(var99)
+            cvar90s.append(cvar90)
+            cvar95s.append(cvar95)
+            cvar99s.append(cvar99)
+
+        return [var90s, var95s, var99s, cvar90s, cvar95s, cvar99s]
+
+    
+    performance_inds = pd.DataFrame([CAGR(log_rets), annualizedVol(log_rets), sharpeRatio(log_rets,rf), sortinoRatio(log_rets,rf), calmarRatio(log_rets, rf), maxDrawdown(log_rets)], columns=temp_tickers, index=["CAGR", "Annualized Volatility", "Sharpe Ratio", "Sortino Ratio", "Calmar Ratio", "Max Drawdown"])
+    vars = pd.DataFrame(valueAtRisk(log_rets), columns=temp_tickers, index=["Value at Risk @ 90", "Value at Risk @ 95", "Value at Risk @ 99", "Cond. Value at Risk @ 90", "Cond. Value at Risk @ 95", "Cond. Value at Risk @ 99"])
+    performance_inds = performance_inds.append(vars)
+    performance_inds = performance_inds.rename(columns = {"^GSPC":"S&P500"})
+    return performance_inds
+
 st.set_page_config(page_title="Efficient Frontier")
 
 sidebar_title = st.sidebar.header("Portfolio Efficient Frontier")
@@ -253,6 +351,8 @@ with st.spinner(text='In progress - wait for calculations to complete in order t
                 st.table(eff_fr[1])
                 st.subheader("Alpha and Beta Statistics")
                 st.table(beta(data))
+                st.subheader("Performance Indicators")
+                st.table(performance_indicators(data, rf))
                 st.subheader("Security Market Line")
                 st.pyplot(securityMarketLine(data, rf, mkt_premium))
                 st.subheader("Rolling Beta")
