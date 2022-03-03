@@ -113,7 +113,7 @@ This one is straightforward. After making sure all the other inputs explained be
 
 ## **Issues and Suggestions**
 
-If you encounter an error in the program, a way to make code faster, any wrong application of financial formulas and concepts or just want to make a suggestion on how to make this project better raise a new issue [here](https://github.com/TFSM00/Efficient-Frontier-Calculator/issues/new/choose). 
+If you encounter an error in the program, a way to make the code run faster, any wrong application of financial formulas and concepts or just want to make a suggestion on how to make this project better, raise a new issue [here](https://github.com/TFSM00/Efficient-Frontier-Calculator/issues/new/choose). 
 
 ## 📝 **Licence**
 
