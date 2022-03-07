@@ -17,7 +17,7 @@ This a financial data science project that allows the user to obtain a efficient
 
 It is a web-hosted interactive application, hosted using [Streamlit's](streamlit.io) Sharing functionality.
 
-The project can be found here: [Link to project](https://share.streamlit.io/tfsm00/markowitz-efficient-frontier/main/efficient-frontier.py)
+The project can be found here: [Link to project](https://cntr.click/9PSzFTf)
 
 ## **Features**
 
