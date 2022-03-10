@@ -13,7 +13,7 @@
 
 ## **Project Description**
 
-This a financial data science project that allows the user to obtain a efficient frontier graph for a specific portfolio of stocks as well as other portfolio performance indicators using monthly-based price data.
+This is a financial data science project that allows the user to obtain a efficient frontier graph for a specific portfolio of stocks as well as other portfolio performance indicators using monthly-based price data.
 
 It is a web-hosted interactive application, hosted using [Streamlit's](streamlit.io) Sharing functionality.
 
