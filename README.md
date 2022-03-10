@@ -117,6 +117,6 @@ If you encounter an error in the program, a way to make the code run faster, any
 
 ## 📝 **Licence**
 
-Copyright © 2019 [Tiago Moreira](https://github.com/TFSM00).<br />
+Copyright © 2022 [Tiago Moreira](https://github.com/TFSM00).<br />
 This project is [MIT](https://github.com/TFSM00/Efficient-Frontier-Calculator/blob/main/LICENSE.txt) licensed.
 
