@@ -13,11 +13,11 @@
 
 ## **Project Description**
 
-This a financial data science project that allows the user to obtain a efficient frontier graph for a specific portfolio of stocks as well as other portfolio performance indicators using monthly-based price data.
+This is a financial data science project that allows the user to obtain a efficient frontier graph for a specific portfolio of stocks as well as other portfolio performance indicators using monthly-based price data.
 
 It is a web-hosted interactive application, hosted using [Streamlit's](streamlit.io) Sharing functionality.
 
-The project can be found here: [Link to project](https://share.streamlit.io/tfsm00/markowitz-efficient-frontier/main/efficient-frontier.py)
+The project can be found here: [Link to project](https://cntr.click/9PSzFTf)
 
 ## **Features**
 
@@ -113,10 +113,10 @@ This one is straightforward. After making sure all the other inputs explained be
 
 ## **Issues and Suggestions**
 
-If you encounter an error in the program, a way to make code faster, any wrong application of financial formulas and concepts or just want to make a suggestion on how to make this project better raise a new issue [here](https://github.com/TFSM00/Efficient-Frontier-Calculator/issues/new/choose). 
+If you encounter an error in the program, a way to make the code run faster, any wrong application of financial formulas and concepts or just want to make a suggestion on how to make this project better, raise a new issue [here](https://github.com/TFSM00/Efficient-Frontier-Calculator/issues/new/choose). 
 
 ## 📝 **Licence**
 
-Copyright © 2019 [Tiago Moreira](https://github.com/TFSM00).<br />
+Copyright © 2022 [Tiago Moreira](https://github.com/TFSM00).<br />
 This project is [MIT](https://github.com/TFSM00/Efficient-Frontier-Calculator/blob/main/LICENSE.txt) licensed.
 
