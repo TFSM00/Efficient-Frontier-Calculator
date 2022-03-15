@@ -6,6 +6,6 @@ port = $PORT\n\
 enableCORS = false\n\
 \n\
 [theme]\n\
-base = 'light'\n\
+base = 'dark'\n\
 \n\
 " > ~/.streamlit/config.toml
