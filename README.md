@@ -17,7 +17,7 @@ This is a financial data science project that allows the user to obtain a effici
 
 It is a web-hosted interactive application, hosted using [Streamlit's](streamlit.io) Sharing functionality.
 
-The project can be found here: [Link to project](https://cntr.click/9PSzFTf)
+The project can be found here: [Link 1](https://cntr.click/9PSzFTf) or [Link 2](https://efficient-frontier-calculator.herokuapp.com/)
 
 ## **Features**
 
