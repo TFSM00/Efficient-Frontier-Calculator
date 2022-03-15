@@ -245,11 +245,11 @@ def performance_indicators(log_rets, rf):
     def maxDrawdown(log_rets):
         log_rets_maxdd = log_rets.copy()
 
-        df_cum_rets = (1 + log_rets_maxdd).cumprod()
-        df_cum_max = df_cum_rets.cummax()
-        df_drawdown = df_cum_max - df_cum_rets
-        df_drawdown_pct = df_drawdown / df_cum_max
-        max_dd = df_drawdown_pct.max()
+        data_cum_rets = (1 + log_rets_maxdd).cumprod()
+        data_cum_max = data_cum_rets.cummax()
+        data_drawdown = data_cum_max - data_cum_rets
+        data_drawdown_pct = data_drawdown / data_cum_max
+        max_dd = data_drawdown_pct.max()
 
         return max_dd
 
