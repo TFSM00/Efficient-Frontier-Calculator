@@ -1,7 +1,7 @@
-from cmath import log
-import numpy as np
-import pandas_datareader as pdr
 import datetime as dt
+import numpy as np
+import yfinance as yf
+yf.pdr_override()
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -13,7 +13,6 @@ from statsmodels.regression.rolling import RollingOLS
 import getFamaFrenchFactors as gff
 from matplotlib.dates import YearLocator, MonthLocator, DateFormatter
 
-#import time
 
 
 def nearest(items, pivot):
@@ -43,7 +42,7 @@ def get_returns(tickers, start_date, end_date):
     temp_ticks = tickers.copy()
     temp_ticks.append("^GSPC")
     try:
-        data = pdr.get_data_yahoo(temp_ticks, start_date, end_date, interval="m")
+        data = yf.download(temp_ticks, start_date, end_date, interval="1mo")
     except:
         err = pd.DataFrame()
         #err.name = "Ticker error"
@@ -333,7 +332,7 @@ with st.spinner(text='In progress - wait for calculations to complete in order t
     if run_button:
         #timer_s = time.time()
         if data.empty:
-            st.sidebar.error("Error: one of the tickers used does not exist or was misspelled")
+            st.sidebar.error("Error: Either one of the tickers used does not exist or was misspelled, or there is a problem with the package used for financial data")
         else:
             if start_date < end_date:
                 #st.sidebar.success('Start date: `%s`\n\nEnd date: `%s`' % (start_date, end_date))
