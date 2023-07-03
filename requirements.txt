@@ -1,3 +1,4 @@
+pip==23.1.2
 getFamaFrenchFactors==0.0.5
 matplotlib==3.1.2
 numpy==1.17.4
